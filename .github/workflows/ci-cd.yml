@@ -26,13 +26,11 @@ jobs:
         
       - name: Build Docker Image
         run: | 
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/myapp:${{BUILD_NUMBER}} .
-
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/myapp:${{BUILD_NUMBER}} \
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/myapp:${{ env.BUILD_NUMBER }} .
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/myapp:${{ env.BUILD_NUMBER }} \
                      ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
 
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/myapp:${{BUILD_NUMBER}}
-
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/myapp:${{ env.BUILD_NUMBER }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
