@@ -55,11 +55,11 @@ jobs:
             docker rm myapp-container || true
             
             # 4. Run the new container
-            # (Adjust port mapping -p 80:8000 as per your application's needs)
+            # (Adjust port mapping -p 80:80 as per your application's needs)
             docker run -d \
               --name myapp-container \
               --restart always \
-              -p 80:8000 \
+              -p 80:80 \
               ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
             
             # 5. Clean up old, unused images to save disk space
