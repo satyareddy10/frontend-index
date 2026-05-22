@@ -64,3 +64,32 @@ jobs:
             
             # 5. Clean up old, unused images to save disk space
             docker image prune -f
+
+    steps:
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST_1 }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # 1. Login to Docker Hub on the remote server
+            echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            
+            # 2. Pull the latest image
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+            
+            # 3. Stop and remove the existing container if it's running (avoids naming conflicts)
+            docker stop myapp-container || true
+            docker rm myapp-container || true
+            
+            # 4. Run the new container
+            # (Adjust port mapping -p 80:80 as per your application's needs)
+            docker run -d \
+              --name myapp-container \
+              --restart always \
+              -p 8000:80 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+            
+            # 5. Clean up old, unused images to save disk space
+            docker image prune -f
