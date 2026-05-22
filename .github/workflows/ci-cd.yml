@@ -1,4 +1,4 @@
-name: Docker Build and Deploy
+name: Docker Build and Deploy two servers
 
 on:
   push:
@@ -91,5 +91,5 @@ jobs:
               -p 8000:80 \
               ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
             
-            # 5. Clean up old, unused images to save disk space
+            # 5. Clean up old unused images to save disk space
             docker image prune -f
